@@ -6,4 +6,12 @@
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 
-@Body
+<MudLayout>
+    <MudAppBar>
+        <MudIcon Icon="@Icons.Filled.CloudCircle" Size="Size.Large"/>
+        <MudText Typo="Typo.h5" Class="ml-3">Weather Tracker</MudText>
+    </MudAppBar>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
