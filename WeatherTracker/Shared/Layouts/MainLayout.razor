@@ -1,0 +1,17 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>WeatherTracker</PageTitle>
+
+<MudThemeProvider IsDarkMode="true"/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+<MudLayout>
+    <MudAppBar>
+        <MudIcon Icon="@Icons.Filled.CloudCircle" Size="Size.Large"/>
+        <MudText Typo="Typo.h5" Class="ml-3">Weather Tracker</MudText>
+    </MudAppBar>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
