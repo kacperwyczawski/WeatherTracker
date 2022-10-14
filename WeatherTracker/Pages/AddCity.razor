@@ -1,0 +1,90 @@
+﻿@page "/AddCity"
+@inject ISnackbar Snackbar
+@inject IHttpClientFactory HttpClientFactory
+
+<MudContainer MaxWidth="MaxWidth.Medium">
+    <MudPaper Class="my-8 pa-8">
+        <MudText Typo="Typo.h3">Add city</MudText>
+    </MudPaper>
+
+    <MudPaper Class="my-8 pa-8">
+        <MudTextField @bind-Value="_search"
+                      Label="Search" Variant="Variant.Outlined"
+                      Adornment="Adornment.End" AdornmentIcon="@Icons.Filled.Search"
+                      AdornmentColor="Color.Secondary" OnAdornmentClick="@SearchForCitiesAsync"/>
+    </MudPaper>
+
+    @if (_cities is not null && _cities.Any())
+    {
+        <MudPaper Class="my-8 pa-4">
+            <MudList>
+                @foreach (var city in GetFilteredCities())
+                {
+                    <MudListItem>
+                        <MudStack Row="true" AlignItems="AlignItems.Center">
+                            <MudIconButton Icon="@Icons.Filled.Add" Variant="Variant.Filled" Color="Color.Primary"/>
+                            <MudText Typo="Typo.h6">@city.Name</MudText>
+                            <MudText Typo="Typo.caption">@city.Lat° @city.Lon°</MudText>
+                        </MudStack>
+                    </MudListItem>
+                }
+            </MudList>
+        </MudPaper>
+    }
+</MudContainer>
+
+@code {
+
+    string? _search;
+
+    City[]? _cities;
+
+    IEnumerable<City> GetFilteredCities()
+    {
+        if (_cities is null || !_cities.Any())
+            return Enumerable.Empty<City>();
+
+        var cities = _cities.ToList();
+
+    // round coordinates
+        cities.ForEach(c => c.Lat = Math.Round(c.Lat));
+        cities.ForEach(c => c.Lon = Math.Round(c.Lon));
+
+    // remove duplicates
+        cities = cities.GroupBy(c => new { c.Lat, c.Lon })
+            .Select(g => g.First())
+            .ToList();
+
+        return cities;
+    }
+
+    async Task SearchForCitiesAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_search))
+        {
+            Snackbar.Add("Please enter a city name", Severity.Error);
+            return;
+        }
+
+    // call the API
+        var client = HttpClientFactory.CreateClient();
+
+        var response = await client.GetAsync("http://api.openweathermap.org/geo/1.0/direct" +
+                      $"?q={_search},PL" +
+                      "&limit=10" +
+                      "&appid=73f26086a5140f643f3b25bf3d7a5c29");
+
+        if (response.IsSuccessStatusCode)
+            _cities = await response.Content.ReadFromJsonAsync<City[]>();
+        else
+            Snackbar.Add("Something went wrong", Severity.Error);
+    }
+
+    class City
+    {
+        public string Name { get; set; } = null!;
+        public decimal Lat { get; set; }
+        public decimal Lon { get; set; }
+    }
+
+}
