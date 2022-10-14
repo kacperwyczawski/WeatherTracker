@@ -1,0 +1,24 @@
+﻿<MudPaper Class="my-8 pa-4">
+    <MudStack Row="true" AlignItems="AlignItems.Center">
+        <img src="@IconUrl" alt="weather icon" height="64px"/>
+        <MudText Typo="Typo.h3">@CityName</MudText>
+        <MudSpacer/>
+        <MudText Typo="Typo.h3">@Temperature°C</MudText>
+        <MudIcon Icon="@Icons.Filled.WaterDrop" Size="Size.Large"/>
+        <MudText Typo="Typo.h3">@Humidity%</MudText>
+    </MudStack>
+</MudPaper>
+
+@code {
+    
+    [Parameter] public string? CityName { get; set; }
+    
+    [Parameter] public string? IconId { get; set; }
+    
+    [Parameter] public decimal? Temperature { get; set; }
+    
+    [Parameter] public decimal? Humidity { get; set; }
+    
+    string IconUrl => $"https://openweathermap.org/img/wn/{IconId}@2x.png";
+    
+}
