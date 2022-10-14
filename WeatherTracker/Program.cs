@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using MudBlazor.Services;
 using WeatherTracker.Data;
 
@@ -9,7 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+
 builder.Services.AddMudServices();
+
+builder.Services.AddSqlite<WeatherTrackerDbContext>("Data Source=WeatherTracker.db");
 
 var app = builder.Build();
 
