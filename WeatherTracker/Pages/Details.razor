@@ -1,0 +1,26 @@
+﻿@page "/Details/{CityId:int}"
+
+<MudContainer MaxWidth="MaxWidth.Medium">
+    <MudPaper Class="my-8 pa-8">
+        <MudText Typo="Typo.h3">Boston logs</MudText>
+    </MudPaper>
+    <MudPaper Class="my-8 pa-8">
+        <MudChart ChartType="ChartType.Line"
+                  ChartSeries="Series"
+                  XAxisLabels="XAxisLabels"
+                  Width="100%"/>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    
+    [Parameter] public int CityId { get; set; }
+    
+    List<ChartSeries> Series = new List<ChartSeries>()
+    {
+        new ChartSeries() { Name = "Humidity", Data = new double[] { 90, 79, 72, 69, 62, 62, 55, 65, 70 } },
+        new ChartSeries() { Name = "Temperature", Data = new double[] { 10, 41, 35, 51, 49, 62, 69, 91, 148 } },
+    };
+    string[] XAxisLabels = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep" };
+    
+}
