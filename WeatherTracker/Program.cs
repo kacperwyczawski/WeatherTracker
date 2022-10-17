@@ -15,6 +15,8 @@ builder.Services.AddSqlite<WeatherTrackerDbContext>("Data Source=WeatherTracker.
 
 builder.Services.AddScoped<ICityService, CityService>();
 
+builder.Services.AddHostedService<WeatherBackgroundService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
