@@ -6,7 +6,7 @@ public class City
 
     public string Name { get; set; }
 
-    public Stack<WeatherData> WeatherData { get; set; }
+    public List<WeatherData> WeatherData { get; set; }
 
-    public WeatherData NewestWeatherData => WeatherData.Peek();
+    public WeatherData NewestWeatherData => WeatherData.Last();
 }
