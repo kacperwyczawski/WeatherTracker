@@ -1,6 +1,8 @@
 ﻿@page "/AddCity"
+@using WeatherTracker.Services
 @inject ISnackbar Snackbar
 @inject IHttpClientFactory HttpClientFactory
+@inject CityService CityService
 
 <PageTitle>Weather Tracker | Add city</PageTitle>
 
@@ -24,7 +26,8 @@
                 {
                     <MudListItem>
                         <MudStack Row="true" AlignItems="AlignItems.Center">
-                            <MudIconButton Icon="@Icons.Filled.Add" Variant="Variant.Filled" Color="Color.Primary"/>
+                            <MudIconButton Icon="@Icons.Filled.Add" Variant="Variant.Filled" Color="Color.Primary"
+                                           OnClick="@(async () => await CityService.AddCityAsync(city.ToCityModel()))"/>
                             <MudText Typo="Typo.h6">@city.Name</MudText>
                             <MudText Typo="Typo.caption">@city.Lat° @city.Lon°</MudText>
                         </MudStack>
@@ -35,8 +38,8 @@
     }
 </MudContainer>
 
-@code {
-
+@code
+{
     string? _search;
 
     City[]? _cities;
@@ -72,9 +75,9 @@
         var client = HttpClientFactory.CreateClient();
 
         var response = await client.GetAsync("http://api.openweathermap.org/geo/1.0/direct" +
-                      $"?q={_search},PL" +
-                      "&limit=10" +
-                      "&appid=73f26086a5140f643f3b25bf3d7a5c29");
+                                             $"?q={_search},PL" +
+                                             "&limit=10" +
+                                             "&appid=73f26086a5140f643f3b25bf3d7a5c29");
 
         if (response.IsSuccessStatusCode)
             _cities = await response.Content.ReadFromJsonAsync<City[]>();
@@ -87,6 +90,12 @@
         public string Name { get; set; } = null!;
         public decimal Lat { get; set; }
         public decimal Lon { get; set; }
-    }
 
+        public Models.City ToCityModel() => new Models.City()
+        {
+            Name = Name,
+            Latitude = Lat,
+            Longitude = Lon
+        };
+    }
 }
