@@ -3,6 +3,7 @@
 @inject ISnackbar Snackbar
 @inject IHttpClientFactory HttpClientFactory
 @inject CityService CityService
+@inject NavigationManager NavigationManager
 
 <PageTitle>Weather Tracker | Add city</PageTitle>
 
@@ -27,7 +28,7 @@
                     <MudListItem>
                         <MudStack Row="true" AlignItems="AlignItems.Center">
                             <MudIconButton Icon="@Icons.Filled.Add" Variant="Variant.Filled" Color="Color.Primary"
-                                           OnClick="@(async () => await CityService.AddCityAsync(city.ToCityModel()))"/>
+                                           OnClick="@(async () => await AddCityAndReturnAsync(city))"/>
                             <MudText Typo="Typo.h6">@city.Name</MudText>
                             <MudText Typo="Typo.caption">@city.Lat° @city.Lon°</MudText>
                         </MudStack>
@@ -83,6 +84,12 @@
             _cities = await response.Content.ReadFromJsonAsync<City[]>();
         else
             Snackbar.Add("Something went wrong", Severity.Error);
+    }
+    
+    async Task AddCityAndReturnAsync(City city)
+    {
+        await CityService.AddCityAsync(city.ToCityModel());
+        NavigationManager.NavigateTo("/");
     }
 
     class City
