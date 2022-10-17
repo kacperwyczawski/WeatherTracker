@@ -10,7 +10,7 @@ public class City
 
     public decimal Longitude { get; set; }
 
-    public List<WeatherData> WeatherData { get; set; }
+    public List<WeatherData> WeatherData { get; set; } = new();
 
     public WeatherData NewestWeatherData => WeatherData.Last();
 }
