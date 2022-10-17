@@ -4,7 +4,7 @@ using WeatherTracker.Models;
 
 namespace WeatherTracker.Services;
 
-public class CityService
+public class CityService : ICityService
 {
     private readonly WeatherTrackerDbContext _context;
 

@@ -13,7 +13,7 @@ builder.Services.AddMudServices();
 
 builder.Services.AddSqlite<WeatherTrackerDbContext>("Data Source=WeatherTracker.db");
 
-builder.Services.AddScoped<CityService>();
+builder.Services.AddScoped<ICityService, CityService>();
 
 var app = builder.Build();
 
