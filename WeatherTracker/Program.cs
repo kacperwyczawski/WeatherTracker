@@ -1,5 +1,6 @@
 using MudBlazor.Services;
 using WeatherTracker.Data;
+using WeatherTracker.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ builder.Services.AddHttpClient();
 builder.Services.AddMudServices();
 
 builder.Services.AddSqlite<WeatherTrackerDbContext>("Data Source=WeatherTracker.db");
+
+builder.Services.AddScoped<CityService>();
 
 var app = builder.Build();
 
