@@ -32,4 +32,11 @@ public class CityService : ICityService
         _context.UserCities.Remove(city);
         await _context.SaveChangesAsync();
     }
+
+    public async Task AddWeatherDataAsync(int id, WeatherData data)
+    {
+        var city = await _context.UserCities.FindAsync(id) ?? throw new Exception("City not found");
+        city.WeatherData.Add(data);
+        await _context.SaveChangesAsync();
+    }
 }
