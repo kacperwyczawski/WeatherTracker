@@ -1,6 +1,4 @@
-﻿@inject NavigationManager NavigationManager
-
-<MudGrid Spacing="1" Class="my-8">
+﻿<MudGrid Spacing="1" Class="my-8">
 
     <MudItem xs="11">
         <MudPaper Class="pa-4 mud-height-full d-flex align-center gap-4">
@@ -17,14 +15,13 @@
 
             <MudItem xs="12">
                 <MudPaper Class="pa-4 d-flex align-center justify-center">
-                    <MudIconButton Icon="@Icons.Filled.BarChart"
-                                   OnClick="@(() => NavigationManager.NavigateTo("/Details/" + CityId))"/>
+                    <MudIconButton Icon="@Icons.Filled.BarChart" OnClick="OnDetails"/>
                 </MudPaper>
             </MudItem>
 
             <MudItem xs="12">
                 <MudPaper Class="pa-4 d-flex align-center justify-center">
-                    <MudIconButton Icon="@Icons.Filled.Delete"/>
+                    <MudIconButton Icon="@Icons.Filled.Delete" OnClick="OnDelete"/>
                 </MudPaper>
             </MudItem>
 
@@ -37,9 +34,6 @@
 
     [Parameter]
     public string? CityName { get; set; }
-    
-    [Parameter]
-    public int? CityId { get; set; }
 
     [Parameter]
     public string? IconId { get; set; }
@@ -49,6 +43,12 @@
 
     [Parameter]
     public decimal? Humidity { get; set; }
+    
+    [Parameter]
+    public EventCallback OnDetails { get; set; }
+    
+    [Parameter]
+    public EventCallback OnDelete { get; set; }
 
     string IconUrl => $"https://openweathermap.org/img/wn/{IconId}@2x.png";
 
