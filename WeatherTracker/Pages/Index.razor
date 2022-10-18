@@ -8,7 +8,8 @@
 <MudContainer MaxWidth="MaxWidth.Medium">
     @foreach (var city in _cities)
     {
-        <CityCard CityName="@city.Name"/>
+        <CityCard IconId="@city.LatestWeatherData?.IconId" CityName="@city.Name"
+                  Temperature="@city.LatestWeatherData?.Temperature" Humidity="@city.LatestWeatherData?.Humidity"/>
     }
     <MudPaper Class="d-flex my-8 pa-4 justify-center">
         <MudIconButton Icon="@Icons.Filled.Add" Size="Size.Large" Href="/AddCity"/>
