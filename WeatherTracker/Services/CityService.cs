@@ -18,7 +18,7 @@ public class CityService : ICityService
         ?? throw new Exception("City not found");
 
     public async Task<IEnumerable<City>> GetAllCitiesAsync() =>
-        await _context.UserCities.AsNoTracking().ToListAsync();
+        await _context.UserCities.Include(city => city.WeatherData).AsNoTracking().ToListAsync();
 
     public async Task AddCityAsync(City city)
     {
