@@ -7,6 +7,7 @@
 <PageTitle>Weather Tracker | Home</PageTitle>
 
 <MudContainer MaxWidth="MaxWidth.Medium">
+    
     @foreach (var city in _cities)
     {
         <CityCard IconId="@city.LatestWeatherData?.IconId" CityName="@city.Name"
@@ -14,12 +15,14 @@
                   OnDetails="@(() => NavigationManager.NavigateTo("/Details/" + city.Id))"
                   OnDelete="@(async () => { await CityService.DeleteCityAsync(city.Id); await FetchDataAsync(); })"/>
     }
+
     @if (_cities.Count() < 10)
     {
         <MudPaper Class="d-flex my-8 pa-4 justify-center">
             <MudIconButton Icon="@Icons.Filled.Add" Size="Size.Large" Href="/AddCity"/>
         </MudPaper>
     }
+    
 </MudContainer>
 
 @code
