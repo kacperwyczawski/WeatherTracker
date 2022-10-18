@@ -61,7 +61,7 @@
         _series = new List<ChartSeries>
         {
             new() { Name = "Humidity", Data = Array.ConvertAll(last10HumidityValues, n => (double)n) },
-            new() { Name = "Humidity", Data = Array.ConvertAll(last10TemperatureValues, n => (double)n) }
+            new() { Name = "Temperature", Data = Array.ConvertAll(last10TemperatureValues, n => (double)n) }
         };
     }
 
