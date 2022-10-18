@@ -1,28 +1,68 @@
 ﻿@page "/Details/{CityId:int}"
+@using WeatherTracker.Services
+@using WeatherTracker.Models
+@inject ICityService CityService
 
 <PageTitle>Weather Tracker | Details</PageTitle>
 
 <MudContainer MaxWidth="MaxWidth.Medium">
     <MudPaper Class="my-8 pa-8">
-        <MudText Typo="Typo.h3">Boston logs</MudText>
+        <MudText Typo="Typo.h3">@(_city?.Name) weather logs</MudText>
     </MudPaper>
     <MudPaper Class="my-8 pa-8">
-        <MudChart ChartType="ChartType.Line"
-                  ChartSeries="Series"
-                  XAxisLabels="XAxisLabels"
-                  Width="100%"/>
+        @if (_series is null)
+        {
+            <MudText>Loading chart...</MudText>
+        }
+        else
+        {
+            <MudChart ChartType="ChartType.Line"
+                      ChartSeries="_series"
+                      XAxisLabels="_labels"
+                      Width="100%"/>
+        }
     </MudPaper>
 </MudContainer>
 
 @code {
-    
-    [Parameter] public int CityId { get; set; }
-    
-    List<ChartSeries> Series = new List<ChartSeries>()
+
+    [Parameter]
+    public int CityId { get; set; }
+
+    City? _city;
+
+    List<ChartSeries>? _series;
+
+    string[]? _labels;
+
+    protected override async Task OnInitializedAsync()
     {
-        new ChartSeries() { Name = "Humidity", Data = new double[] { 90, 79, 72, 69, 62, 62, 55, 65, 70 } },
-        new ChartSeries() { Name = "Temperature", Data = new double[] { 10, 41, 35, 51, 49, 62, 69, 91, 148 } },
-    };
-    string[] XAxisLabels = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep" };
-    
+        await base.OnInitializedAsync();
+        _city = await CityService.GetCityAsync(CityId);
+
+        var last10TemperatureValues = _city.WeatherData
+            .Where(w => w.IncludeInStatistics)
+            .TakeLast(10)
+            .Select(w => w.Temperature)
+            .ToArray();
+        
+        var last10HumidityValues = _city.WeatherData
+            .Where(w => w.IncludeInStatistics)
+            .TakeLast(10)
+            .Select(w => w.Humidity)
+            .ToArray();
+
+        _labels = _city.WeatherData
+            .Where(w => w.IncludeInStatistics)
+            .TakeLast(10)
+            .Select(w => w.Date.ToString("t"))
+            .ToArray();
+
+        _series = new List<ChartSeries>
+        {
+            new() { Name = "Humidity", Data = Array.ConvertAll(last10HumidityValues, n => (double)n) },
+            new() { Name = "Humidity", Data = Array.ConvertAll(last10TemperatureValues, n => (double)n) }
+        };
+    }
+
 }
