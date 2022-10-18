@@ -14,9 +14,12 @@
                   OnDetails="@(() => NavigationManager.NavigateTo("/Details/" + city.Id))"
                   OnDelete="@(async () => { await CityService.DeleteCityAsync(city.Id); await FetchDataAsync(); })"/>
     }
-    <MudPaper Class="d-flex my-8 pa-4 justify-center">
-        <MudIconButton Icon="@Icons.Filled.Add" Size="Size.Large" Href="/AddCity"/>
-    </MudPaper>
+    @if (_cities.Count() < 10)
+    {
+        <MudPaper Class="d-flex my-8 pa-4 justify-center">
+            <MudIconButton Icon="@Icons.Filled.Add" Size="Size.Large" Href="/AddCity"/>
+        </MudPaper>
+    }
 </MudContainer>
 
 @code
@@ -28,6 +31,6 @@
         await base.OnInitializedAsync();
         await FetchDataAsync();
     }
-    
+
     async Task FetchDataAsync() => _cities = await CityService.GetAllCitiesAsync();
 }
