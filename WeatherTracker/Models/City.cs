@@ -12,5 +12,5 @@ public class City
 
     public List<WeatherData> WeatherData { get; set; } = new();
 
-    public WeatherData NewestWeatherData => WeatherData.Last();
+    public WeatherData? LatestWeatherData => WeatherData.LastOrDefault();
 }
