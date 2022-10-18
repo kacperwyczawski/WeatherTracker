@@ -14,11 +14,17 @@ public class CityService : ICityService
     }
 
     public async Task<City> GetCityAsync(int id) =>
-        await _context.UserCities.AsNoTracking().FirstOrDefaultAsync(c => c.Id == id)
+        await _context.UserCities
+            .Include(city => city.WeatherData)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Id == id)
         ?? throw new Exception("City not found");
 
     public async Task<IEnumerable<City>> GetAllCitiesAsync() =>
-        await _context.UserCities.Include(city => city.WeatherData).AsNoTracking().ToListAsync();
+        await _context.UserCities
+            .Include(city => city.WeatherData)
+            .AsNoTracking()
+            .ToListAsync();
 
     public async Task AddCityAsync(City city)
     {
