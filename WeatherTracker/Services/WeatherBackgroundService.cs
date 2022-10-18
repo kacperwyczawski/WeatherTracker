@@ -8,7 +8,7 @@ public class WeatherBackgroundService : BackgroundService
     private readonly IHttpClientFactory _httpClientFactory;
 
     private readonly IServiceProvider _serviceProvider;
-    private readonly PeriodicTimer _timer = new(TimeSpan.FromSeconds(10));
+    private readonly PeriodicTimer _timer = new(TimeSpan.FromMinutes(30));
 
     public WeatherBackgroundService(IHttpClientFactory httpClientFactory, IServiceProvider serviceProvider)
     {
