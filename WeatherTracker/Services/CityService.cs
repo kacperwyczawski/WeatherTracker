@@ -28,7 +28,11 @@ public class CityService : ICityService
 
     public async Task DeleteCityAsync(int id)
     {
-        var city = await GetCityAsync(id);
+        var city = await _context.UserCities.FindAsync(id);
+        
+        if (city is null)
+            return;
+        
         _context.UserCities.Remove(city);
         await _context.SaveChangesAsync();
     }
