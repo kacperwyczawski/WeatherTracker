@@ -8,7 +8,7 @@ public class WeatherBackgroundService : BackgroundService
     private readonly IHttpClientFactory _httpClientFactory;
 
     private readonly IServiceProvider _serviceProvider;
-    private readonly PeriodicTimer _timer = new(TimeSpan.FromSeconds(5));
+    private readonly PeriodicTimer _timer = new(TimeSpan.FromSeconds(10));
 
     public WeatherBackgroundService(IHttpClientFactory httpClientFactory, IServiceProvider serviceProvider)
     {
@@ -21,11 +21,11 @@ public class WeatherBackgroundService : BackgroundService
         using var scope = _serviceProvider.CreateScope();
         var cityService = scope.ServiceProvider.GetService<ICityService>();
 
-        while (await _timer.WaitForNextTickAsync(stoppingToken)
-               && !stoppingToken.IsCancellationRequested)
+        do
         {
             await UpdateWeather(cityService, stoppingToken);
-        }
+        } while (await _timer.WaitForNextTickAsync(stoppingToken)
+                 && !stoppingToken.IsCancellationRequested);
     }
 
     private async Task UpdateWeather(ICityService cityService, CancellationToken stoppingToken)
