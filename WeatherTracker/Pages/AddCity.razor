@@ -6,6 +6,7 @@
 @inject IHttpClientFactory HttpClientFactory
 @inject ICityService CityService
 @inject NavigationManager NavigationManager
+@inject IConfiguration Configuration
 
 <PageTitle>Weather Tracker | Add city</PageTitle>
 
@@ -80,7 +81,7 @@
         var response = await client.GetAsync("http://api.openweathermap.org/geo/1.0/direct" +
                                              $"?q={_search},PL" +
                                              "&limit=10" +
-                                             "&appid=73f26086a5140f643f3b25bf3d7a5c29");
+                                             "&appid=" + Configuration["ApiKey"]);
 
         if (response.IsSuccessStatusCode)
             _cities = await response.Content.ReadFromJsonAsync<City[]>();
@@ -101,7 +102,7 @@
         var response = await client.GetAsync("https://api.openweathermap.org/data/2.5/weather" +
                                              $"?lat={city.Lat}" +
                                              $"&lon={city.Lon}" +
-                                             "&appid=73f26086a5140f643f3b25bf3d7a5c29" +
+                                             "&appid=" + Configuration["ApiKey"] +
                                              "&units=metric");
 
         if (response.IsSuccessStatusCode)
