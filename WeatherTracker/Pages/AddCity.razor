@@ -1,5 +1,7 @@
 ﻿@page "/AddCity"
 @using WeatherTracker.Services
+@using WeatherTracker.Models
+@using System.Text.Json.Serialization
 @inject ISnackbar Snackbar
 @inject IHttpClientFactory HttpClientFactory
 @inject ICityService CityService
@@ -85,12 +87,43 @@
         else
             Snackbar.Add("Something went wrong", Severity.Error);
     }
-    
+
     async Task AddCityAndReturnAsync(City city)
     {
-        await CityService.AddCityAsync(city.ToCityModel());
+        var cityModel = city.ToCityModel();
+
+    // fetch data, but don't include in statistics,
+    // it's just for showing current weather
+
+        Root? weather;
+
+        var client = HttpClientFactory.CreateClient();
+        var response = await client.GetAsync("https://api.openweathermap.org/data/2.5/weather" +
+                                             $"?lat={city.Lat}" +
+                                             $"&lon={city.Lon}" +
+                                             "&appid=73f26086a5140f643f3b25bf3d7a5c29" +
+                                             "&units=metric");
+
+        if (response.IsSuccessStatusCode)
+            weather = await response.Content.ReadFromJsonAsync<Root>();
+        else
+            throw new Exception("Http request failed");
+
+        cityModel.WeatherData.Add(new WeatherData
+        {
+            Date = DateTime.Now,
+            Humidity = weather.Main.Humidity,
+            Temperature = weather.Main.Temperature,
+            IconId = weather.Weather[0].Icon,
+            IncludeInStatistics = false
+        });
+
+    // Add city to db and return to index
+        await CityService.AddCityAsync(cityModel);
         NavigationManager.NavigateTo("/");
     }
+
+    #region JsonClasses
 
     class City
     {
@@ -105,4 +138,30 @@
             Longitude = Lon
         };
     }
+
+    class Main
+    {
+        [JsonPropertyName("temp")]
+        public decimal Temperature { get; set; }
+
+        [JsonPropertyName("humidity")]
+        public int Humidity { get; set; }
+    }
+
+    class Root
+    {
+        [JsonPropertyName("weather")]
+        public List<Weather> Weather { get; set; }
+
+        [JsonPropertyName("main")]
+        public Main Main { get; set; }
+    }
+
+    class Weather
+    {
+        [JsonPropertyName("icon")]
+        public string Icon { get; set; }
+    }
+
+    #endregion
 }
