@@ -4,6 +4,10 @@ public class WeatherData
 {
     public int Id { get; set; }
 
+    public int CityId { get; set; }
+
+    public City City { get; set; }
+
     public DateTime Date { get; set; }
 
     public decimal Temperature { get; set; }
