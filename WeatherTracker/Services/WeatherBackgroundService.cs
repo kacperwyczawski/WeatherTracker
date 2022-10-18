@@ -5,15 +5,19 @@ namespace WeatherTracker.Services;
 
 public class WeatherBackgroundService : BackgroundService
 {
+    private readonly IConfiguration _configuration;
     private readonly IHttpClientFactory _httpClientFactory;
 
     private readonly IServiceProvider _serviceProvider;
+
     private readonly PeriodicTimer _timer = new(TimeSpan.FromMinutes(30));
 
-    public WeatherBackgroundService(IHttpClientFactory httpClientFactory, IServiceProvider serviceProvider)
+    public WeatherBackgroundService(IHttpClientFactory httpClientFactory,
+        IServiceProvider serviceProvider, IConfiguration configuration)
     {
         _httpClientFactory = httpClientFactory;
         _serviceProvider = serviceProvider;
+        _configuration = configuration;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -40,7 +44,7 @@ public class WeatherBackgroundService : BackgroundService
             var response = await client.GetAsync("https://api.openweathermap.org/data/2.5/weather" +
                                                  $"?lat={city.Latitude}" +
                                                  $"&lon={city.Longitude}" +
-                                                 "&appid=73f26086a5140f643f3b25bf3d7a5c29" +
+                                                 "&appid=" + _configuration["ApiKey"] +
                                                  "&units=metric", stoppingToken);
 
             // deserialize
