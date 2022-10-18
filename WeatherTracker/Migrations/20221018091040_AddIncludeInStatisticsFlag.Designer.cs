@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WeatherTracker.Data;
 
@@ -10,9 +11,10 @@ using WeatherTracker.Data;
 namespace WeatherTracker.Migrations
 {
     [DbContext(typeof(WeatherTrackerDbContext))]
-    partial class WeatherTrackerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221018091040_AddIncludeInStatisticsFlag")]
+    partial class AddIncludeInStatisticsFlag
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.10");
@@ -56,9 +58,6 @@ namespace WeatherTracker.Migrations
                     b.Property<string>("IconId")
                         .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("IncludeInStatistics")
-                        .HasColumnType("INTEGER");
 
                     b.Property<decimal>("Temperature")
                         .HasColumnType("TEXT");

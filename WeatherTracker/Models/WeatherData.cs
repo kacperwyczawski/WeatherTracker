@@ -15,4 +15,6 @@ public class WeatherData
     public decimal Humidity { get; set; }
 
     public string IconId { get; set; }
+
+    public bool IncludeInStatistics { get; set; } = true;
 }
