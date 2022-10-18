@@ -2,14 +2,17 @@
 @using WeatherTracker.Services
 @using WeatherTracker.Models
 @inject ICityService CityService
+@inject NavigationManager NavigationManager
 
 <PageTitle>Weather Tracker | Home</PageTitle>
 
 <MudContainer MaxWidth="MaxWidth.Medium">
     @foreach (var city in _cities)
     {
-        <CityCard IconId="@city.LatestWeatherData?.IconId" CityName="@city.Name" CityId="@city.Id"
-                  Temperature="@city.LatestWeatherData?.Temperature" Humidity="@city.LatestWeatherData?.Humidity"/>
+        <CityCard IconId="@city.LatestWeatherData?.IconId" CityName="@city.Name"
+                  Temperature="@city.LatestWeatherData?.Temperature" Humidity="@city.LatestWeatherData?.Humidity"
+                  OnDetails="@(() => NavigationManager.NavigateTo("/Details/" + city.Id))"
+                  OnDelete="@(async () => { await CityService.DeleteCityAsync(city.Id); await FetchDataAsync(); })"/>
     }
     <MudPaper Class="d-flex my-8 pa-4 justify-center">
         <MudIconButton Icon="@Icons.Filled.Add" Size="Size.Large" Href="/AddCity"/>
@@ -23,6 +26,8 @@
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        _cities = await CityService.GetAllCitiesAsync();
+        await FetchDataAsync();
     }
+    
+    async Task FetchDataAsync() => _cities = await CityService.GetAllCitiesAsync();
 }
