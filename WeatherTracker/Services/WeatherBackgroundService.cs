@@ -48,7 +48,7 @@ public class WeatherBackgroundService : BackgroundService
                 weather = await response.Content.ReadFromJsonAsync<Root>(cancellationToken: stoppingToken);
             else
                 throw new Exception("Http request failed");
-            
+
             // add weather to db
             var weatherData = new WeatherData
             {
@@ -64,7 +64,7 @@ public class WeatherBackgroundService : BackgroundService
 
     private class Main
     {
-        [JsonPropertyName("temp")] public double Temperature { get; set; }
+        [JsonPropertyName("temp")] public decimal Temperature { get; set; }
         [JsonPropertyName("humidity")] public int Humidity { get; set; }
     }
 

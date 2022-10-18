@@ -6,9 +6,9 @@ public class WeatherData
 
     public DateTime Date { get; set; }
 
-    public double Temperature { get; set; }
+    public decimal Temperature { get; set; }
 
-    public double Humidity { get; set; }
+    public decimal Humidity { get; set; }
 
     public string IconId { get; set; }
 }
