@@ -6,22 +6,31 @@
 <PageTitle>Weather Tracker | Details</PageTitle>
 
 <MudContainer MaxWidth="MaxWidth.Medium">
-    <MudPaper Class="my-8 pa-8">
-        <MudText Typo="Typo.h3">@(_city?.Name) weather logs</MudText>
-    </MudPaper>
-    <MudPaper Class="my-8 pa-8">
-        @if (_series is null)
-        {
-            <MudText>Loading chart...</MudText>
-        }
-        else
-        {
-            <MudChart ChartType="ChartType.Line"
-                      ChartSeries="_series"
-                      XAxisLabels="_labels"
-                      Width="100%"/>
-        }
-    </MudPaper>
+    @if (_labels?.Length < 2)
+    {
+        <MudPaper Class="my-8 pa-8">
+            <MudText Typo="Typo.h3">Sorry, there is not enough data to generate the chart</MudText>
+        </MudPaper>
+    }
+    else
+    {
+        <MudPaper Class="my-8 pa-8">
+            <MudText Typo="Typo.h3">@(_city?.Name) weather logs</MudText>
+        </MudPaper>
+        <MudPaper Class="my-8 pa-8">
+            @if (_series is null)
+            {
+                <MudText>Loading chart...</MudText>
+            }
+            else
+            {
+                <MudChart ChartType="ChartType.Line"
+                          ChartSeries="_series"
+                          XAxisLabels="_labels"
+                          Width="100%"/>
+            }
+        </MudPaper>
+    }
 </MudContainer>
 
 @code {
@@ -45,7 +54,7 @@
             .TakeLast(10)
             .Select(w => w.Temperature)
             .ToArray();
-        
+
         var last10HumidityValues = _city.WeatherData
             .Where(w => w.IncludeInStatistics)
             .TakeLast(10)
@@ -66,3 +75,4 @@
     }
 
 }
+
