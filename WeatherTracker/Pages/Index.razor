@@ -11,7 +11,7 @@
     <MudGrid>
         @foreach (var city in _cities)
         {
-            <MudItem lg="12" xl="6">
+            <MudItem xs="12" sm="12" md="6" lg="4" xl="3">
                 <CityCard IconId="@city.LatestWeatherData?.IconId" CityName="@city.Name"
                           Temperature="@city.LatestWeatherData?.Temperature" Humidity="@city.LatestWeatherData?.Humidity"
                           OnDetails="@(() => NavigationManager.NavigateTo("/Details/" + city.Id))"
