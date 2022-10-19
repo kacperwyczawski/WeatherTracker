@@ -6,15 +6,20 @@
 
 <PageTitle>Weather Tracker | Home</PageTitle>
 
-<MudContainer MaxWidth="MaxWidth.Medium">
-    
-    @foreach (var city in _cities)
-    {
-        <CityCard IconId="@city.LatestWeatherData?.IconId" CityName="@city.Name"
-                  Temperature="@city.LatestWeatherData?.Temperature" Humidity="@city.LatestWeatherData?.Humidity"
-                  OnDetails="@(() => NavigationManager.NavigateTo("/Details/" + city.Id))"
-                  OnDelete="@(async () => { await CityService.DeleteCityAsync(city.Id); await FetchDataAsync(); })"/>
-    }
+<MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="mt-8">
+
+    <MudGrid>
+        @foreach (var city in _cities)
+        {
+            <MudItem lg="12" xl="6">
+                <CityCard IconId="@city.LatestWeatherData?.IconId" CityName="@city.Name"
+                          Temperature="@city.LatestWeatherData?.Temperature" Humidity="@city.LatestWeatherData?.Humidity"
+                          OnDetails="@(() => NavigationManager.NavigateTo("/Details/" + city.Id))"
+                          OnDelete="@(async () => { await CityService.DeleteCityAsync(city.Id); await FetchDataAsync(); })"/>
+            </MudItem>
+        }
+    </MudGrid>
+
 
     @if (_cities.Count() < 10)
     {
@@ -22,7 +27,7 @@
             <MudIconButton Icon="@Icons.Filled.Add" Size="Size.Large" Href="/AddCity"/>
         </MudPaper>
     }
-    
+
 </MudContainer>
 
 @code
