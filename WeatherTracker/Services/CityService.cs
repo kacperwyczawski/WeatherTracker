@@ -35,10 +35,10 @@ public class CityService : ICityService
     public async Task DeleteCityAsync(int id)
     {
         var city = await _context.UserCities.FindAsync(id);
-        
+
         if (city is null)
             return;
-        
+
         _context.UserCities.Remove(city);
         await _context.SaveChangesAsync();
     }
@@ -49,4 +49,9 @@ public class CityService : ICityService
         city.WeatherData.Add(data);
         await _context.SaveChangesAsync();
     }
+
+    public async Task<bool> IsInUserCities(string name, int latitude, int longitude) =>
+        await _context.UserCities.AnyAsync(c => c.Name == name
+                                                && c.Latitude == latitude
+                                                && c.Longitude == longitude);
 }
