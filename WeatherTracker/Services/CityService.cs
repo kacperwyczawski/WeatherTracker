@@ -50,8 +50,8 @@ public class CityService : ICityService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<bool> IsInUserCities(string name, int latitude, int longitude) =>
-        await _context.UserCities.AnyAsync(c => c.Name == name
-                                                && c.Latitude == latitude
-                                                && c.Longitude == longitude);
+    public bool IsInUserCities(string name, int latitude, int longitude) =>
+        _context.UserCities.Any(c => c.Name == name
+                                     && c.Latitude == latitude
+                                     && c.Longitude == longitude);
 }
